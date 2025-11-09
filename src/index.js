@@ -161,7 +161,7 @@ async function informAPI(hostnames, ip, name, token) {
   const isIPV4 = ip.includes("."); //poorman's ipv4 check
 
   const zones = new Map();
-
+  
   for (const hostname of hostnames) {
     const domainName =
       name && hostname.endsWith(name)
@@ -173,6 +173,7 @@ async function informAPI(hostnames, ip, name, token) {
 
     const zone = zones.get(domainName);
     const record = await cloudflare.findRecord(zone, hostname, isIPV4);
+    record.zone_id = zone.id;
     await cloudflare.updateRecord(record, ip);
   }
 }
